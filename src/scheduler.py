@@ -3,26 +3,36 @@ from datetime import datetime, timedelta
 def schedule_tasks(tasks, start_time, time_limit):
     scheduled_tasks = []
     current_time = start_time
+    cumulative_short_duration = 0
 
     for calendar_key, task_description, duration in tasks:
-        # Skip tasks less than 15 minutes but count them for gap calculation
+        # Handle short tasks for gap calculation
         if duration < 15:
+            cumulative_short_duration += duration
+            if cumulative_short_duration >= 15:
+                # Add a gap and reset the counter
+                current_time += timedelta(minutes=15)
+                cumulative_short_duration -= 15
             continue
 
-        # Add a task
+        # Check if adding the current task exceeds the time limit
+        if current_time + timedelta(minutes=duration) > datetime.combine(datetime.today(), time_limit):
+            # Adjust end time to the time limit and schedule overlapping tasks
+            end_time = datetime.combine(datetime.today(), time_limit)
+            scheduled_tasks.append((calendar_key, task_description, duration, current_time, end_time))
+            continue
+
+        # Schedule normal tasks
         end_time = current_time + timedelta(minutes=duration)
         scheduled_tasks.append((calendar_key, task_description, duration, current_time, end_time))
         
         # Update current time for the next task
         current_time = end_time
 
-        # Check if total time exceeds the limit
-        if current_time.time() > time_limit:
-            # Logic to handle overlapping tasks
-            break
-
-    # Logic for buffer event if needed
-    # ...
+    # Add buffer event if there's remaining time
+    if current_time.time() < time_limit:
+        buffer_end_time = datetime.combine(datetime.today(), time_limit)
+        scheduled_tasks.append(("buffer", "Buffer Time", (buffer_end_time - current_time).seconds // 60, current_time, buffer_end_time))
 
     return scheduled_tasks
 
