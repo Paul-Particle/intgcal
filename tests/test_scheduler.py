@@ -1,0 +1,2 @@
+-e # Tests for scheduler
+
