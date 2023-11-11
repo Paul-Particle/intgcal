@@ -1,36 +1,38 @@
-# Main script
-
+import json
 import datetime
-import os
+import argparse
+from task_parser import parse_tasks
+from scheduler import schedule_tasks
+from ics_creator import create_ics_files
 
-# Function to parse tasks from the list
-def parse_tasks(task_list):
-    tasks = []
-    # Logic to parse tasks
-    return tasks
+def read_task_list(file_path):
+    with open(file_path, 'r') as file:
+        return file.readlines()
 
-# Function to schedule tasks
-def schedule_tasks(tasks, start_time, time_limit):
-    scheduled_tasks = []
-    # Logic to schedule tasks
-    return scheduled_tasks
+def load_config():
+    config_path = 'config.json'  # Path to the config file in the root directory
+    with open(config_path, 'r') as file:
+        return json.load(file)
 
-# Function to create .ics files
-def create_ics_files(scheduled_tasks, calendar_mapping):
-    # Logic to create .ics files
+def calculate_next_quarter_hour():
+    now = datetime.datetime.now()
+    return (now + datetime.timedelta(minutes=(15 - now.minute % 15))).replace(second=0, microsecond=0)
 
-def main():
-    # Read task list from a file or input
-    task_list = read_task_list()  # Placeholder function
-    
-    # Read calendar mapping and time limit from config
-    calendar_mapping, time_limit = read_config()  # Placeholder function
+def main(task_list_path):
+    # Load configuration
+    config = load_config()
+    calendar_mapping = config["calendar_mapping"]
+    time_limit_str = config["time_limit"]
+    time_limit = datetime.datetime.strptime(time_limit_str, '%H:%M').time()
+
+    # Read task list from a file
+    task_list = read_task_list(task_list_path)
     
     # Parse tasks
     tasks = parse_tasks(task_list)
     
     # Calculate the next quarter hour from the current time
-    start_time = calculate_next_quarter_hour()  # Placeholder function
+    start_time = calculate_next_quarter_hour()
 
     # Schedule tasks
     scheduled_tasks = schedule_tasks(tasks, start_time, time_limit)
@@ -39,4 +41,8 @@ def main():
     create_ics_files(scheduled_tasks, calendar_mapping)
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Intentional Calendar Event Generator")
+    parser.add_argument("task_list_path", help="Path to the task list file")
+
+    args = parser.parse_args()
+    main(args.task_list_path)

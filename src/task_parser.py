@@ -4,17 +4,23 @@ import re
 
 def parse_tasks(task_list):
     tasks = []
-    # Extended regex to match more symbols and handle edge cases
-    task_regex = re.compile(r"""
-        ^                  # Start of the line
-        (?:                # Non-capturing group for the whole prefix
-            \(([0-9\~\&\<\>\?]).{0,5}\){1,4}  # Capturing group for '(X)' format with special characters
-            |              # OR
-            ([0-9\~\&\<\>\?]).{0,5}\){1,4}   # Capturing group for 'X)' format with special characters
-        )                  # Closing parenthesis of the prefix
-        \s*                # Optional whitespace
-        ([^\[]+)           # Capturing group for the task description (anything not a '[')
-        \[([0-9]+)\]       # Capturing group for the duration '[Y]'
+
+    # Named regex sub-patterns for clarity
+    calendar_prefix = r"[0-9\~\&\<\>\?]"
+    additional_info = r".{0,5}"
+    trailing_parentheses = r"\){1,4}"
+    
+    # Combining sub-patterns into the final regex pattern
+    task_regex = re.compile(rf"""
+        ^                          # Start of the line
+        (?:                        # Non-capturing group for the whole prefix
+            \(({calendar_prefix}{additional_info}){trailing_parentheses}  # Capturing group for '(X)' format
+            |                      # OR
+            {calendar_prefix}{additional_info}{trailing_parentheses}      # Capturing group for 'X)' format
+        )                          # Closing parenthesis of the prefix
+        \s*                        # Optional whitespace
+        ([^\[]+)                   # Capturing group for the task description (anything not a '[')
+        \[([0-9]+)\]               # Capturing group for the duration '[Y]'
     """, re.VERBOSE)
     for line in task_list:
         # Ignore lines starting with '-' or '+'
@@ -24,7 +30,11 @@ def parse_tasks(task_list):
         # Match the line with the regular expression
         match = task_regex.match(line)
         if match:
-            calendar_key = match.group(1) or match.group(2)  # Handle '(X)' and 'X)' cases
+            # Handle '(X)' and 'X)' cases. 
+            # If no match, .group() returns None, so the first .group(). 'or'
+            # only checks the first operand's 'truthyness' and returns it if it
+            # is true, and the second operand if not.
+            calendar_key = match.group(1) or match.group(2)
             task_description = match.group(3).strip()
             duration = int(match.group(4))
 

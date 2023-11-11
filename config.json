@@ -1,0 +1,16 @@
+{
+    "calendar_mapping": {
+        "1": "1) Work",
+        "2": "2) Learning",
+        "3": "3) Sports & Health",
+        "4": "4) Fun & People",
+        "5": "5) Optimizizing",
+        "6": "6) Impact & Career",
+        "&": "&) Misc & Chores",
+        "?": "&) Misc & Chores",
+        ">": "&) Misc & Chores",
+        "<": "&) Misc & Chores",
+        "~": "&) Misc & Chores",
+    },
+    "time_limit": "23:00"
+}

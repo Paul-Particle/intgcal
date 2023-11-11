@@ -1,5 +1,3 @@
-# Scheduler module
-
 from datetime import datetime, timedelta
 
 def schedule_tasks(tasks, start_time, time_limit):
