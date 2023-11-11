@@ -1,4 +1,5 @@
--e # Python package requirements
+# Python package requirements
 icalendar
 pytz
+pytest
 
