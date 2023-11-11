@@ -2,7 +2,7 @@ import json
 import datetime
 import argparse
 from task_parser import parse_tasks
-from scheduler import schedule_tasks
+from scheduler import schedule_tasks, calculate_next_quarter_hour
 from ics_creator import create_ics_files
 
 def read_task_list(file_path):
@@ -13,10 +13,6 @@ def load_config():
     config_path = 'config.json'  # Path to the config file in the root directory
     with open(config_path, 'r') as file:
         return json.load(file)
-
-def calculate_next_quarter_hour():
-    now = datetime.datetime.now()
-    return (now + datetime.timedelta(minutes=(15 - now.minute % 15))).replace(second=0, microsecond=0)
 
 def main(task_list_path):
     # Load configuration

@@ -1,5 +1,9 @@
 from datetime import datetime, timedelta
 
+def calculate_next_quarter_hour():
+    now = datetime.datetime.now()
+    return (now + datetime.timedelta(minutes=(15 - now.minute % 15))).replace(second=0, microsecond=0)
+
 def schedule_tasks(tasks, start_time, time_limit):
     scheduled_tasks = []
     current_time = start_time
