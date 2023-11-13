@@ -15,5 +15,3 @@ def test_simple_scheduling():
 def test_short_tasks():
     # Test scheduling of short tasks
     pass
-
-# Additional test functions for other scenarios
