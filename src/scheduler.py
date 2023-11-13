@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 def calculate_next_quarter_hour():
     now = datetime.now()
-    return (now + datetime.timedelta(minutes=(15 - now.minute % 15))).replace(second=0, microsecond=0)
+    return (now + timedelta(minutes=(15 - now.minute % 15))).replace(second=0, microsecond=0)
 
 def schedule_tasks(tasks, start_time, time_limit):
     scheduled_tasks = []
@@ -39,6 +39,7 @@ def schedule_tasks(tasks, start_time, time_limit):
     return scheduled_tasks
 
 # Example usage
+parsed_tasks = [("1", "task1", 30),("2", "task2", 30),("3", "task3", 50)]
 time_limit = datetime.now().replace(hour=23, minute=0, second=0, microsecond=0).time()
 start_time = calculate_next_quarter_hour().time()
 

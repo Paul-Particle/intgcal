@@ -1,2 +1,2 @@
--e # Tests for ICS creator
+# Tests for ICS creator
 

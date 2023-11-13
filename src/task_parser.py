@@ -1,5 +1,3 @@
-# Task parser module
-
 import re
 
 def parse_tasks(task_list):
