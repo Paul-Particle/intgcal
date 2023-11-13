@@ -42,33 +42,3 @@ def parse_tasks(task_list):
             print(f"Warning: Ignored malformed task line: '{line}'")
 
     return tasks
-
-# Example usage
-task_list = [
-    "2 [1]", #invalid
-    "",#invalid
-    "4) Randomness & Surprises $wf:r:efbbaef317e2", # invalid (no [time])
-    "Invalid task format",
-    "1) Check email [5]",
-    "(2) Write report [30]",
-    "-3) Ignored task [10]",
-    "+4) Another ignored task [15]",
-    "~) General task [20]",
-    "&) Another task [25]",
-    "+(~) water 1 [5]",
-    "+(~) log am [5]",
-    "+(<) outcomes [30]",
-    "+(>) intentions [15]",
-    "(?) plan day [15]",
-    "-(~) food 1 [30]",
-    "+4) Sarah outcomes nachlesen",
-    "5) System tüfteln weiter [180]",
-    "5) Pay invoice Fr. Mathew [5]",
-    "4)) Marielis anrufen wg. Essen [10] $wf:458bd987bc3b",
-    "4,5)) Spanien planen [45] $wf:520783331385",
-    "4)) Plan Marielis Essen [15] $wf:c7cb5ca23a2e",
-    "4)) Jakob schreiben [5] $wf:884d12d5475e",
-]
-
-parsed_tasks = parse_tasks(task_list)
-print(parsed_tasks)
