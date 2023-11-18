@@ -2,23 +2,26 @@ from icalendar import Calendar, Event
 import pytz
 
 def create_ics_files(scheduled_tasks, calendar_mapping, timezone='UTC'):
+    # Dictionary to hold events for each calendar
+    calendars = {}
+
     for calendar_key, task_description, duration, start_time, end_time in scheduled_tasks:
-        # Create a calendar
-        cal = Calendar()
+        # Get the calendar ID (omitting possible '(' in key)
+        calendar_id = calendar_mapping.get(calendar_key[-1], 'default')
 
         # Create an event
         event = Event()
-        event.add('summary', f'{task_description} [{duration} mins]')
+        event.add('summary', f'{calendar_key}) {task_description} [{duration}]')
         event.add('dtstart', start_time.astimezone(pytz.timezone(timezone)))
         event.add('dtend', end_time.astimezone(pytz.timezone(timezone)))
 
-        # Add the event to the calendar
-        cal.add_component(event)
+        # Add event to the corresponding calendar in the dictionary
+        if calendar_id not in calendars:
+            calendars[calendar_id] = Calendar()
+        calendars[calendar_id].add_component(event)
 
-        # Save the calendar to an .ics file
-        calendar_id = calendar_mapping.get(calendar_key, 'default')
-        file_name = f'{calendar_id}_{start_time.strftime("%Y%m%dT%H%M%S")}.ics'
+    # Write each calendar to its own .ics file
+    for calendar_id, cal in calendars.items():
+        file_name = f'{calendar_id}.ics'
         with open(file_name, 'wb') as ics_file:
             ics_file.write(cal.to_ical())
-
-create_ics_files(scheduled_tasks, calendar_mapping)

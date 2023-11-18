@@ -12,9 +12,9 @@ def parse_tasks(task_list):
     task_regex = re.compile(rf"""
         ^                          # Start of the line
         (?:                        # Non-capturing group for the whole prefix
-            \(({calendar_prefix}{additional_info}){trailing_parentheses}  # Capturing group for '(X)' format
+            (\({calendar_prefix}){additional_info}{trailing_parentheses}  # Capturing group for '(X)' format
             |                      # OR
-            ({calendar_prefix}{additional_info}){trailing_parentheses}      # Capturing group for 'X)' format
+            ({calendar_prefix}){additional_info}{trailing_parentheses}      # Capturing group for 'X)' format
         )                          # Closing parenthesis of the prefix
         \s*                        # Optional whitespace
         ([^\[]+)                   # Capturing group for the task description (anything not a '[')
