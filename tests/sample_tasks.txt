@@ -1,3 +1,6 @@
+1) Test [30]
+2) Test [30]
+3) Test [30]
 (?) plan day [15]
 (~) water 2 [5]
 (~) log mid [5]

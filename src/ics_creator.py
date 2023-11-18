@@ -7,7 +7,7 @@ def create_ics_files(scheduled_tasks, calendar_mapping, timezone='UTC'):
 
     for calendar_key, task_description, duration, start_time, end_time in scheduled_tasks:
         # Get the calendar ID (omitting possible '(' in key)
-        calendar_id = calendar_mapping.get(calendar_key[-1], 'default')
+        calendar_id = calendar_mapping.get(calendar_key[-1], '&) Misc')
 
         # Create an event
         event = Event()
