@@ -9,7 +9,7 @@ def test_simple_scheduling():
 
     scheduled_tasks = schedule_tasks(tasks, start_time, time_limit)
 
-    assert len(scheduled_tasks) == 2
+    assert len(scheduled_tasks) == len(tasks) + 1 # 2 from list, +1 for buffer
     # ... additional assertions ...
 
 def test_short_tasks():

@@ -35,12 +35,13 @@
 (?) outcomes [30]
 4)) Peter schreiben [5] $wf:884d12d5475e
 4)) Peter schreiben [7] $wf:884d12d5475e
-+(~) water 1 [5]
++(~) ignored tasks [5]
 +(~) log am [5]
 +(<) outcomes [30]
 +(>) intentions [15]
 -(~) food 1 [30]
 +4) outcomes nachlesen
-4) Randomness & Surprises $wf:r:efbbaef317e2
 Invalid task format
+4) task without time
+4) Randomness & Surprises $wf:r:efbbaef317e2
 2 [1]

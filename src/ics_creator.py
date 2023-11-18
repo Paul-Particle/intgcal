@@ -1,5 +1,3 @@
-# ICS creator module
-
 from icalendar import Calendar, Event
 import pytz
 
@@ -22,12 +20,5 @@ def create_ics_files(scheduled_tasks, calendar_mapping, timezone='UTC'):
         file_name = f'{calendar_id}_{start_time.strftime("%Y%m%dT%H%M%S")}.ics'
         with open(file_name, 'wb') as ics_file:
             ics_file.write(cal.to_ical())
-
-# Example usage
-calendar_mapping = {
-    '1': 'work_calendar',
-    '2': 'personal_calendar',
-    # Add more mappings as needed
-}
 
 create_ics_files(scheduled_tasks, calendar_mapping)

@@ -33,14 +33,7 @@ def schedule_tasks(tasks, start_time, time_limit):
     if time_slot_start.time() < time_limit:
         buffer_end_time = datetime.combine(current_date, time_limit)
         scheduled_tasks.append(
-            ("&", "Buffer Time", (buffer_end_time - time_slot_start).seconds // 60, time_slot_start, buffer_end_time)
+            ("&", "Buffer", (buffer_end_time - time_slot_start).seconds // 60, time_slot_start, buffer_end_time)
         )
 
     return scheduled_tasks
-
-# Example usage
-parsed_tasks = [("1", "task1", 30),("2", "task2", 30),("3", "task3", 50)]
-time_limit = datetime.now().replace(hour=23, minute=0, second=0, microsecond=0).time()
-start_time = calculate_next_quarter_hour().time()
-
-scheduled_tasks = schedule_tasks(parsed_tasks, start_time, time_limit)
