@@ -10,8 +10,7 @@
         "?": "&) Misc",
         ">": "&) Misc",
         "<": "&) Misc",
-        "~": "&) Misc",
-        "default": "&) Misc"
+        "~": "&) Misc"
     },
     "time_limit": "23:00"
 }

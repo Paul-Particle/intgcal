@@ -12,7 +12,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'intgcal=intgcal.main:main',  # Replace 'your_tool_name' and 'src.main:main' appropriately
+            'intgcal=intgcal.main:main',
         ],
     },
 )

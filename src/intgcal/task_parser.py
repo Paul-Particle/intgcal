@@ -3,12 +3,10 @@ import re
 def parse_tasks(task_list):
     tasks = []
 
-    # Named regex sub-patterns for clarity
     calendar_prefix = r"[0-9\~\&\<\>\?]"
     additional_info = r".{0,5}"
     trailing_parentheses = r"\){1,4}"
     
-    # Combining sub-patterns into the final regex pattern
     task_regex = re.compile(rf"""
         ^                          # Start of the line
         (?:                        # Non-capturing group for the whole prefix
@@ -29,9 +27,6 @@ def parse_tasks(task_list):
         match = task_regex.match(line)
         if match:
             # Handle '(X)' and 'X)' cases. 
-            # If no match, .group() returns None, so the first .group(). 'or'
-            # only checks the first operand's 'truthyness' and returns it if it
-            # is true, and the second operand if not.
             calendar_key = match.group(1) or match.group(2)
             task_description = match.group(3).strip()
             duration = int(match.group(4))

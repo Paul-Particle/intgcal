@@ -8,7 +8,6 @@ def schedule_tasks(tasks, start_time, time_limit):
     scheduled_tasks = []
     current_date = datetime.now().date()
     time_limit = datetime.combine(current_date, time_limit)
-    #time_slot_start = datetime.combine(current_date, start_time)
     time_slot_start = start_time
     cumulative_short_duration = 0
 
