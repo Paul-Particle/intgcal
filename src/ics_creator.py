@@ -1,7 +1,7 @@
 from icalendar import Calendar, Event
 import pytz
 
-def create_ics_files(scheduled_tasks, calendar_mapping, timezone='UTC'):
+def create_ics_files(scheduled_tasks, calendar_mapping, task_list_path, timezone='UTC'):
     # Dictionary to hold events for each calendar
     calendars = {}
 
@@ -21,7 +21,9 @@ def create_ics_files(scheduled_tasks, calendar_mapping, timezone='UTC'):
         calendars[calendar_id].add_component(event)
 
     # Write each calendar to its own .ics file
+    # Place .ics files in same dir and name as input task list file
+    file_path_prefix = task_list_path.split('.txt')[0]
     for calendar_id, cal in calendars.items():
-        file_name = f'{calendar_id}.ics'
+        file_name = f'{file_path_prefix}_{calendar_id}.ics'
         with open(file_name, 'wb') as ics_file:
             ics_file.write(cal.to_ical())

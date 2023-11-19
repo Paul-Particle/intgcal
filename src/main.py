@@ -4,6 +4,7 @@ import argparse
 from task_parser import parse_tasks
 from scheduler import schedule_tasks, calculate_next_quarter_hour
 from ics_creator import create_ics_files
+from gcalcli_importer import import_to_gcalcli
 
 def read_task_list(file_path):
     with open(file_path, 'r') as file:
@@ -33,12 +34,24 @@ def main(task_list_path):
     # Schedule tasks
     scheduled_tasks = schedule_tasks(tasks, start_time, time_limit)
     
-    # Create .ics files
-    create_ics_files(scheduled_tasks, calendar_mapping)
+    # Create .ics files in task list file directory
+    create_ics_files(scheduled_tasks, calendar_mapping, task_list_path)
+
+    # import .ics files to Google calendar with gcalcli
+    if args.gcalcli_import:
+        import_to_gcalcli(calendar_mapping, task_list_path)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Intentional Calendar Event Generator")
-    parser.add_argument("task_list_path", help="Path to the task list file")
+    parser.add_argument(
+        "task_list_path",
+        help="Path to the task list file"
+    )
+    parser.add_argument(
+        "--gcalcli-import", 
+        action="store_true", 
+        help="Import to Google Calendar using gcalcli"
+    )
 
     args = parser.parse_args()
     main(args.task_list_path)
