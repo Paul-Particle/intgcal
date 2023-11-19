@@ -1,10 +1,10 @@
 import json
 import datetime
 import argparse
-from task_parser import parse_tasks
-from scheduler import schedule_tasks, calculate_next_quarter_hour
-from ics_creator import create_ics_files
-from gcalcli_importer import import_to_gcalcli
+from intgcal.task_parser import parse_tasks
+from intgcal.scheduler import schedule_tasks, calculate_next_quarter_hour
+from intgcal.ics_creator import create_ics_files
+from intgcal.gcalcli_importer import import_to_gcalcli
 
 def read_task_list(file_path):
     with open(file_path, 'r') as file:
