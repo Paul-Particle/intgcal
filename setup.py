@@ -3,7 +3,8 @@ from setuptools import setup, find_packages
 setup(
     name='intgcal',
     version='0.1.0',
-    packages=find_packages(),
+    packages=find_packages(where='src'),
+    package_dir={'': 'src'},
     include_package_data=True,
     install_requires=[
         'icalendar',
@@ -12,7 +13,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'intgcal=intgcal.main:main',
+            'intgcal=intgcal.main:cli_wrapper',
         ],
     },
 )
