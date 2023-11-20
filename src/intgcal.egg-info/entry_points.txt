@@ -1,0 +1,2 @@
+[console_scripts]
+intgcal = intgcal.main:cli_wrapper
