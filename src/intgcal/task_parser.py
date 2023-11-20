@@ -1,7 +1,6 @@
 import re
 
 def parse_tasks(task_list):
-    tasks = []
 
     calendar_prefix = r"[0-9\~\&\<\>\?]"
     additional_info = r".{0,5}"
@@ -18,12 +17,15 @@ def parse_tasks(task_list):
         ([^\[]+)                   # Capturing group for the task description (anything not a '[')
         \[([0-9]+)\]               # Capturing group for the duration '[Y]'
     """, re.VERBOSE)
+
+    tasks = []
+    total_duration = 0
+
     for line in task_list:
-        # Ignore lines starting with '-' or '+'
-        if line.startswith('-') or line.startswith('+'):
+        # Ignore lines starting with '-' or '+' and empty lines
+        if line.startswith('-') or line.startswith('+') or line.startswith('\n'):
             continue
 
-        # Match the line with the regular expression
         match = task_regex.match(line)
         if match:
             # Handle '(X)' and 'X)' cases. 
@@ -32,8 +34,20 @@ def parse_tasks(task_list):
             duration = int(match.group(4))
 
             tasks.append((calendar_key, task_description, duration))
+            total_duration += duration
         else:
-            # Handle error: malformed task line
             print(f"Warning: Ignored malformed task line: '{line}'")
+
+    print(
+        f'Parsed {len(tasks)} tasks.',
+        f'Expected duration: {total_duration // 60} h {total_duration % 60} min'
+    )
+    if total_duration > 60 * 8:
+        print('WARNING: Significant workload')
+    elif total_duration > 60 * 12:
+        print('DANGER: Unsustainable workload!')
+    elif total_duration > 60 * 18:
+        print('ABORT: Total duration > 18 h !')
+        return
 
     return tasks

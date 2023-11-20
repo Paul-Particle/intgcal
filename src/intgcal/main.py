@@ -3,6 +3,7 @@ import json
 import argparse
 from datetime import datetime
 from argparse import RawDescriptionHelpFormatter
+
 from intgcal.task_parser import parse_tasks
 from intgcal.scheduler import schedule_tasks
 from intgcal.ics_creator import create_ics_files
@@ -97,6 +98,7 @@ def cli_wrapper():
     args = parser.parse_args()
 
     start_time = parse_time(args.start_time)
+    end_time = parse_time(args.end_time)
 
     main(args.task_list_path, args.gcalcli_import, start_time, end_time)
 
