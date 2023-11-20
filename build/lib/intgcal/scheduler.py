@@ -19,15 +19,16 @@ def schedule_tasks(tasks, start_time, time_limit):
     current_date = now.date()
 
     start_time = datetime.combine(current_date, start_time)
+    start_time = calculate_next_quarter_hour(start_time)
 
-    if now > start_time:
+    if current_time > start_time.time():
         start_time = start_time + timedelta(days=1)
 
-    time_limit = datetime.combine(current_date, time_limit)
+    time_limit = datetime.combine(start_time.date(), time_limit)
 
+    time_slot_start = start_time
     cumulative_short_duration = 0
     scheduled_tasks = []
-    time_slot_start = start_time
 
     for calendar_key, task_description, duration in tasks:
         # Handle short tasks for gap calculation
@@ -51,9 +52,9 @@ def schedule_tasks(tasks, start_time, time_limit):
     # Add buffer event if there's remaining time
     if time_slot_start < time_limit:
         buffer_end_time = time_limit
-        scheduled_tasks.append(
-            ("&", "Buffer", 
-             (buffer_end_time - time_slot_start).seconds // 60, time_slot_start, buffer_end_time)
-        )
+#        scheduled_tasks.append(
+#            ("&", "Buffer", 
+#             (buffer_end_time - time_slot_start).seconds // 60, time_slot_start, buffer_end_time)
+#        )
 
     return scheduled_tasks

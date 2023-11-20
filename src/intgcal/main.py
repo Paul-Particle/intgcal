@@ -3,7 +3,7 @@ import datetime as dt
 import argparse
 from argparse import RawDescriptionHelpFormatter
 from intgcal.task_parser import parse_tasks
-from intgcal.scheduler import schedule_tasks, calculate_next_quarter_hour
+from intgcal.scheduler import schedule_tasks
 from intgcal.ics_creator import create_ics_files
 from intgcal.gcalcli_importer import import_to_gcalcli
 
@@ -81,7 +81,7 @@ def cli_wrapper():
         except ValueError:
             raise ValueError(f"Invalid time format: {start_time_str}. Please use HH:MM format.")
     else:
-        start_time = calculate_next_quarter_hour().time()
+        start_time = dt.datetime.now().time()
 
 
     main(args.task_list_path, args.gcalcli_import, start_time)
