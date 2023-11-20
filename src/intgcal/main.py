@@ -1,28 +1,46 @@
+# main.py
 import json
-import datetime as dt
 import argparse
+from datetime import datetime
 from argparse import RawDescriptionHelpFormatter
 from intgcal.task_parser import parse_tasks
 from intgcal.scheduler import schedule_tasks
 from intgcal.ics_creator import create_ics_files
-from intgcal.gcalcli_importer import import_to_gcalcli
+from intgcal.gcalcli_importer import import_with_gcalcli
+
+def parse_time(time_str):
+    # Convert time_str to a datetime.time object
+    if time_str:
+        try:
+            time_dt = datetime.strptime(args.time_dt, '%H:%M').time()
+        except ValueError:
+            raise ValueError(
+                f"Invalid time format: {time_str}. Please use HH:MM format."
+            )
+        return time_dt
+
+def load_config(path, start_time, end_time):
+    if not path:
+        path = '/Users/peter/Programming/intgcal/config.json'
+    with open(path, 'r') as file:
+        config = json.load(file)
+        calendar_mapping = config["calendar_mapping"]
+        time_limit_str = config["end_time"]
+        if not end_time:
+            end_time = datetime.strptime(time_limit_str, '%H:%M').time()
+        if not start_time:
+            start_time = datetime.now().time()
+        return calendar_mapping, start_time, end_time
 
 def read_task_list(file_path):
     with open(file_path, 'r') as file:
         return file.readlines()
 
-def load_config():
-    config_path = 'config.json'  # Path to the config file in the root directory
-    with open(config_path, 'r') as file:
-        return json.load(file)
 
-def main(task_list_path, gcalcli_import=False, start_time=None):
+def main(task_list_path, gcalcli_import=False, start_time=None, end_time=None):
 
     # Load configuration
-    config = load_config()
-    calendar_mapping = config["calendar_mapping"]
-    time_limit_str = config["time_limit"]
-    time_limit = dt.datetime.strptime(time_limit_str, '%H:%M').time()
+    calendar_mapping, start_time, end_time = load_config()
 
     # Read task list from a file
     task_list = read_task_list(task_list_path)
@@ -31,14 +49,15 @@ def main(task_list_path, gcalcli_import=False, start_time=None):
     tasks = parse_tasks(task_list)
     
     # Schedule tasks
-    scheduled_tasks = schedule_tasks(tasks, start_time, time_limit)
+    scheduled_tasks = schedule_tasks(tasks, start_time, end_time)
     
     # Create .ics files in task list file directory
     create_ics_files(scheduled_tasks, calendar_mapping, task_list_path)
 
     # import .ics files to Google calendar with gcalcli
     if gcalcli_import:
-        import_to_gcalcli(calendar_mapping, task_list_path)
+        import_with_gcalcli(calendar_mapping, task_list_path)
+
 
 def cli_wrapper():
     parser = argparse.ArgumentParser(
@@ -69,22 +88,17 @@ def cli_wrapper():
         help="Optional start time in HH:MM format (24-hour)", 
         default=None
     )  
-
+    parser.add_argument(
+        "--end-time",
+        help="Optional start time in HH:MM format (24-hour)", 
+        default=None
+    )  
 
     args = parser.parse_args()
 
+    start_time = parse_time(args.start_time)
 
-    # Convert start_time_str to a datetime.time object
-    if args.start_time:
-        try:
-            start_time = dt.datetime.strptime(args.start_time, '%H:%M').time()
-        except ValueError:
-            raise ValueError(f"Invalid time format: {start_time_str}. Please use HH:MM format.")
-    else:
-        start_time = dt.datetime.now().time()
-
-
-    main(args.task_list_path, args.gcalcli_import, start_time)
+    main(args.task_list_path, args.gcalcli_import, start_time, end_time)
 
 if __name__ == "__main__":
     cli_wrapper()

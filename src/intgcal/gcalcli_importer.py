@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-def import_to_gcalcli(calendar_mapping, task_list_path):
+def import_with_gcalcli(calendar_mapping, task_list_path):
     # Create a set of unique calendar IDs
     unique_calendar_ids = set(calendar_mapping.values())
     

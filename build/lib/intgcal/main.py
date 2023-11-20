@@ -1,3 +1,4 @@
+# main.py
 import json
 import datetime as dt
 import argparse
@@ -12,7 +13,7 @@ def read_task_list(file_path):
         return file.readlines()
 
 def load_config():
-    config_path = 'config.json'  # Path to the config file in the root directory
+    config_path = '/Users/peter/Programming/intgcal/config.json'  # Path to the config file in the root directory
     with open(config_path, 'r') as file:
         return json.load(file)
 
