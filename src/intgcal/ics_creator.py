@@ -24,6 +24,6 @@ def create_ics_files(scheduled_tasks, calendar_mapping, task_list_path, timezone
     # Place .ics files in same dir and name as input task list file
     file_path_prefix = task_list_path.split('.txt')[0]
     for calendar_id, cal in calendars.items():
-        file_name = f'{file_path_prefix}_{calendar_id}.ics'
+        file_name = f'{file_path_prefix} {calendar_id}.ics'
         with open(file_name, 'wb') as ics_file:
             ics_file.write(cal.to_ical())
