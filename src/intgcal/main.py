@@ -20,7 +20,7 @@ def parse_time(time_str):
             )
         return time_dt
 
-def load_config(path, start_time, end_time):
+def load_config(path=None, start_time=None, end_time=None):
     if not path:
         path = '/Users/peter/Programming/intgcal/config.json'
     with open(path, 'r') as file:
