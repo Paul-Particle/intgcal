@@ -32,6 +32,7 @@ def parse_tasks(task_list):
             calendar_key = match.group(1) or match.group(2)
             task_description = match.group(3).strip()
             duration = int(match.group(4))
+            duration = duration + (- duration % -5)
 
             tasks.append((calendar_key, task_description, duration))
             total_duration += duration
