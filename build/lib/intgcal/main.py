@@ -10,7 +10,6 @@ from intgcal.ics_creator import create_ics_files
 from intgcal.gcalcli_importer import import_with_gcalcli
 
 def parse_time(time_str):
-    # Convert time_str to a datetime.time object
     if time_str:
         try:
             time_dt = datetime.strptime(args.time_dt, '%H:%M').time()

@@ -9,38 +9,46 @@ from intgcal.scheduler import schedule_tasks
 from intgcal.ics_creator import create_ics_files
 from intgcal.gcalcli_importer import import_with_gcalcli
 
+
 def parse_time(time_str):
+    # If given convert string from command line argument to datetime
     if time_str:
         try:
-            time_dt = datetime.strptime(args.time_dt, '%H:%M').time()
+            return datetime.strptime(time_str, '%H:%M').time()
         except ValueError:
             raise ValueError(
-                f"Invalid time format: {time_str}. Please use HH:MM format."
+                f'Invalid time format: {time_str}. Please use HH:MM format.'
             )
-        return time_dt
+    return None
 
-def load_config(path=None, start_time=None, end_time=None):
-    if not path:
-        path = '/Users/peter/Programming/intgcal/config.json'
+
+def load_config(path='config.json', start_time=None, end_time=None):
+    # Load the configuration file
+    if not os.path.exists(path):
+        path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'config.json')
     with open(path, 'r') as file:
         config = json.load(file)
-        calendar_mapping = config["calendar_mapping"]
-        time_limit_str = config["end_time"]
-        if not end_time:
-            end_time = datetime.strptime(time_limit_str, '%H:%M').time()
-        if not start_time:
-            start_time = datetime.now().time()
-        return calendar_mapping, start_time, end_time
+
+    # Set default values from the config file if not provided
+    calendar_mapping = config['calendar_mapping']
+    if not end_time:
+        time_limit_str = config['end_time']
+        end_time = datetime.strptime(time_limit_str, '%H:%M').time()
+    if not start_time:
+        start_time = datetime.now().time()
+
+    return calendar_mapping, start_time, end_time
+
 
 def read_task_list(file_path):
     with open(file_path, 'r') as file:
         return file.readlines()
 
 
-def main(task_list_path, gcalcli_import=False, start_time=None, end_time=None):
+def main(task_list_path, config_path=None, gcalcli_import=False, start_time=None, end_time=None):
 
     # Load configuration
-    calendar_mapping, start_time, end_time = load_config()
+    calendar_mapping, start_time, end_time = load_config(config_path, start_time, end_time)
 
     # Read task list from a file
     task_list = read_task_list(task_list_path)
@@ -62,35 +70,31 @@ def main(task_list_path, gcalcli_import=False, start_time=None, end_time=None):
 def cli_wrapper():
     parser = argparse.ArgumentParser(
         description=''' 
-        Schedule Intend.do lists on Google Calendar.\n\n
-        Add the estimated duration of the intention in minutes enclosed in
-        brackets after the description.\n\n
-        Example: '1) Work on report [120]' would generate 120 minute event at
-        the next full quarter hour in the calendar '1) Work' as per the default
-        config.json.\n\n
-        For each goal prefix one .ics file is created. Automatic import of .ics
-        files is done with gcalcli (install separately, including vobject
-        required for the import functionality). Use config.json to set up the
-        mapping between goals and calendars.\n\n
+        Schedule Intend.do lists on Google Calendar.
         ''',
         formatter_class=RawDescriptionHelpFormatter
     )
     parser.add_argument(
-        "task_list_path", 
+        'task_list_path', 
         help='Path to the task list file'
     )
     parser.add_argument(
-        "--gcalcli-import", action="store_true",
-        help='Directly import .ics files with gcalcli'
-    )
-    parser.add_argument(
-        "--start-time",
-        help="Optional start time in HH:MM format (24-hour)", 
+        '--config-path',
+        help='Optional path to config.json file', 
         default=None
     )  
     parser.add_argument(
-        "--end-time",
-        help="Optional start time in HH:MM format (24-hour)", 
+        '--gcalcli-import', action='store_true',
+        help='Directly import .ics files with gcalcli'
+    )
+    parser.add_argument(
+        '--start-time',
+        help='Optional start time in HH:MM format (24-hour)', 
+        default=None
+    )  
+    parser.add_argument(
+        '--end-time',
+        help='Optional end time in HH:MM format (24-hour)', 
         default=None
     )  
 
@@ -99,7 +103,7 @@ def cli_wrapper():
     start_time = parse_time(args.start_time)
     end_time = parse_time(args.end_time)
 
-    main(args.task_list_path, args.gcalcli_import, start_time, end_time)
+    main(args.task_list_path, args.config_path, args.gcalcli_import, start_time, end_time)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     cli_wrapper()
