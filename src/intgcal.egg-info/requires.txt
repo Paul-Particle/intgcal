@@ -1,3 +1,0 @@
-icalendar
-pytz
-pytest
