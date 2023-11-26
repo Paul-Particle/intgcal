@@ -1,7 +1,6 @@
 # scheduler.py
 from datetime import datetime, timedelta
 
-
 def calculate_next_quarter_hour(input_time=None):
     if input_time is None:
         input_time = datetime.now()
