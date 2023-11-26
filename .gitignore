@@ -4,3 +4,5 @@ venv/
 *.swp
 .DS_Store
 *.ics
+build/
+*.egg-info/
