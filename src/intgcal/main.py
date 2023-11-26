@@ -1,4 +1,5 @@
 # main.py
+import os
 import json
 import argparse
 from datetime import datetime
@@ -24,8 +25,9 @@ def parse_time(time_str):
 
 def load_config(path='config.json', start_time=None, end_time=None):
     # Load the configuration file
-    if not os.path.exists(path):
-        path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'config.json')
+    if path is None or not os.path.exists(path):
+        package_dir = os.path.dirname(os.path.realpath(__file__))
+        path = os.path.join(package_dir, 'config.json')
     with open(path, 'r') as file:
         config = json.load(file)
 

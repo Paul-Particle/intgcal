@@ -5,6 +5,7 @@ setup(
     version='0.2.0',
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
+    package_data={'intgcal': ['config.json']},
     include_package_data=True,
     install_requires=[
         'icalendar',

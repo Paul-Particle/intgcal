@@ -50,7 +50,8 @@ functionality).
 Note: These instructions are specific to MacOS and potentially idiosyncratic.
 
 1. Clone or download the project directory.
-2. Create a Python virtual environment: `conda create intgcal_venv` and activate it by running `conda activate intgcal_env`.
+2. Create a Python virtual environment: `conda create intgcal_venv` and
+   activate it by running `conda activate intgcal_env`.
 3. Configure `config.json` with your calendar names and task list prefixes.
 4. Install `intgcal`: Navigate to the project root and run `pip install .`
 5. Install `gcalcli`: `brew install gcalcli`

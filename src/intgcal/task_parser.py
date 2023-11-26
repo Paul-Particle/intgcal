@@ -43,12 +43,12 @@ def parse_tasks(task_list):
         f'Parsed {len(tasks)} tasks.',
         f'Expected duration: {total_duration // 60} h {total_duration % 60} min'
     )
-    if total_duration > 60 * 8:
-        print('WARNING: Significant workload')
-    elif total_duration > 60 * 12:
-        print('DANGER: Unsustainable workload!')
-    elif total_duration > 60 * 18:
+    if total_duration > 60 * 18:
         print('ABORT: Total duration > 18 h !')
         return
+    elif total_duration > 60 * 12:
+        print('DANGER: Unsustainable workload!')
+    elif total_duration > 60 * 8:
+        print('WARNING: Significant workload')
 
     return tasks
