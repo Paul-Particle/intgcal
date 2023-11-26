@@ -36,12 +36,12 @@ def parse_line(line, task_regex):
    if match:
        # Handle '(X)' and 'X)' cases. 
        calendar_key = match.group(1)
-       task_description = match.group(2).strip()
+       description = match.group(2).strip()
 
        duration = int(match.group(3))
-        duration = math.ceil(duration / 5) * 5
+       duration = math.ceil(duration / 5) * 5
 
-       return Task(calendar_key, task_description, duration)
+       return Task(calendar_key, description, duration)
 
 
 def print_info(tasks, total_duration):
