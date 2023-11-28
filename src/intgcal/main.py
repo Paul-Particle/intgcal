@@ -66,7 +66,10 @@ def main(task_list_path, config_path=None, gcalcli_import=False, start_time=None
 
     # import .ics files to Google calendar with gcalcli
     if gcalcli_import:
+        print('ics files created. Importing to calendar ...')
         import_with_gcalcli(calendar_mapping, task_list_path)
+    else:
+        print('ics files created. Run again with --gcalcli-import to import to calendar.')
 
 
 def cli_wrapper():
