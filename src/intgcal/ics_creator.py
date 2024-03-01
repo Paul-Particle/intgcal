@@ -17,7 +17,7 @@ def create_ics_files(scheduled_tasks, calendar_mapping, task_list_path, timezone
         calendar_id = calendar_mapping.get(calendar_key, '&) Misc')
 
         event = Event()
-        event.add('summary', f'{full_prefix}) {task_description} [{planned_duration}]')
+        event.add('summary', f'{full_prefix} {task_description} [{planned_duration}]')
         event.add('dtstart', start_time.astimezone(pytz.timezone(timezone)))
         event.add('dtend', end_time.astimezone(pytz.timezone(timezone)))
 
