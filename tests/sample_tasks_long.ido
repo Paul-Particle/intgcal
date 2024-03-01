@@ -7,7 +7,6 @@
 (~) food 2 [60]
 6) Lunch [60]
 5) Paket holen [30]
-5) System tüfteln weiter [180]
 5) Pay invoice [5]
 5) Read mail [5]
 6) Answer connection [15]
@@ -15,29 +14,28 @@
 (~) log pm [5]
 (~) food 3 [60]
 (?) outcomes [30]
-4)) Marie anrufen wg. Essen [10] $wf:458bd987bc3b
-4) Randomness & Surprises $wf:r:efbbaef317e2
-4,5)) Schweiz planen [45] $wf:520783331385
-4)) Plan Marie Essen [15] $wf:c7cb5ca23a2e
-4)) Mike schreiben [5] $wf:884d12d5475e
+4)) Marie anrufen wg. Essen [10] $wf:1234abcd
+4) Randomness & Surprises $wf:1234abcd
+4,5)) Schweiz planen [45] $wf:1234abcd
+4)) Plan Marie Essen [15] $wf:1234abcd
+4)) Mike schreiben [5] $wf:1234abcd
 &) Laundry [5]
 &) Laundry dry [5]
 &) Einkaufen [60]
 &) Feinwäsche einräumen [15]
-3,5) Feuermelder anbringen [15] $wf:3a53f033638f
+3,5) Feuermelder anbringen [15] $wf:1234abcd
 (~) eat am [30]
-&) Einkauf Gulasch Gnocci [60] $wf:ddca38766c65
-5)) Organize week-level todos [30]  $wf:r:99f164aed5db
+5)) Organize week-level todos [30]  $wf:1234abcd
 (~) drink mid [5]
 (~) eat mid [60]
 5) Add times to weekly todos [5]
-4) Book haircut [5] $wf:b1ab405d7512
-5) Make new haircut reminder [5] $wf:73b10dec9dcc
+4) Book haircut [5] $wf:1234abcd
+5) Make new haircut reminder [5] $wf:1234abcd
 (~) drink pm [5]
 (~) eat pm [60]
 (?) outcomes [30]
-4)) Peter schreiben [5] $wf:884d12d5475e
-4)) Peter schreiben [7] $wf:884d12d5475e
+4)) Peter schreiben [5] $wf:1234abcd
+4)) Peter schreiben [7] $wf:1234abcd
 +(~) ignored tasks [5]
 +(~) log am [5]
 +(<) outcomes [30]
@@ -46,5 +44,5 @@
 +4) outcomes nachlesen
 Invalid task format
 4) task without time
-4) Randomness & Surprises $wf:r:efbbaef317e2
+4) Randomness & Surprises $wf:1234abcd
 2 [1]

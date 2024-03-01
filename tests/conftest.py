@@ -6,5 +6,5 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 @pytest.fixture
 def sample_tasks():
-    with open('tests/sample_tasks.txt', 'r') as file:
+    with open('tests/sample_tasks.ido', 'r') as file:
         return file.readlines()
