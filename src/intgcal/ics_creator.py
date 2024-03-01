@@ -2,7 +2,7 @@ from icalendar import Calendar, Event
 import pytz
 
 def save_ics_files(calendars, task_list_path):
-    file_path_prefix = task_list_path.split('.txt')[0]
+    file_path_prefix = task_list_path.split('.ido')[0]
     for calendar_id, cal in calendars.items():
         file_name = f'{file_path_prefix} {calendar_id}.ics'
         with open(file_name, 'wb') as ics_file:
@@ -12,13 +12,12 @@ def create_ics_files(scheduled_tasks, calendar_mapping, task_list_path, timezone
 
     calendars = {}
 
-    for calendar_key, task_description, duration, start_time, end_time in scheduled_tasks:
+    for calendar_key, full_prefix, task_description, duration, planned_duration, start_time, end_time in scheduled_tasks:
 
-        # Get the calendar ID ('(' prefix is irrelevant for mapping)
-        calendar_id = calendar_mapping.get(calendar_key.removeprefix('('), '&) Misc')
+        calendar_id = calendar_mapping.get(calendar_key, '&) Misc')
 
         event = Event()
-        event.add('summary', f'{calendar_key}) {task_description} [{duration}]')
+        event.add('summary', f'{full_prefix}) {task_description} [{planned_duration}]')
         event.add('dtstart', start_time.astimezone(pytz.timezone(timezone)))
         event.add('dtend', end_time.astimezone(pytz.timezone(timezone)))
 

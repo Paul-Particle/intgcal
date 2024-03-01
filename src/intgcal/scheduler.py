@@ -33,24 +33,24 @@ def schedule_tasks(tasks, start_time, end_time):
 
     start_time, end_time = add_date(start_time, end_time)
 
-    time_slot_start = start_time
-
-    batched_duration = 0
     scheduled_tasks = []
+    time_slot_start = start_time
+    batched_duration = 15 # set to 15 to prevent batching of first task
 
     for Task in tasks:
-        calendar_key, description, duration = Task
+        calendar_key, full_prefix, description, duration = Task
+        planned_duration = duration
 
         # Schedule short tasks as overlapping 15 min events
         is_batchable = batched_duration + duration <= SHORT_DURATION
         is_short = duration <= SHORT_DURATION
-        if is_batchable:
+        if is_batchable and batched_duration > 0: # time left in 15 min slot
             time_slot_start -= timedelta(minutes=SHORT_DURATION)
             batched_duration += duration
             duration = SHORT_DURATION
         elif is_short:
+            batched_duration = duration
             duration = SHORT_DURATION
-            batched_duration = 0
         else:
             batched_duration = 0
 
@@ -64,7 +64,8 @@ def schedule_tasks(tasks, start_time, end_time):
             time_slot_start = end_time - timedelta(minutes=duration)
 
         # Save task
-        task = (calendar_key, description, duration,
+        task = (calendar_key, full_prefix, description, 
+                duration, planned_duration,
                 time_slot_start, time_slot_end)
         scheduled_tasks.append(task)
 

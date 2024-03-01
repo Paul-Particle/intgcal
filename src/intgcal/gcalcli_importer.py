@@ -5,7 +5,7 @@ def import_with_gcalcli(calendar_mapping, task_list_path):
     # Create a set of unique calendar IDs
     unique_calendar_ids = set(calendar_mapping.values())
     
-    file_path_prefix = task_list_path.split('.txt')[0]
+    file_path_prefix = task_list_path.split('.ido')[0]
 
     for calendar_id in unique_calendar_ids:
         ics_file = f'{file_path_prefix} {calendar_id}.ics'

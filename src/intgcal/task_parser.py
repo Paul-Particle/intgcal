@@ -3,30 +3,28 @@ import math
 from collections import namedtuple
 
 
-Task = namedtuple('Task', ['calendar_key', 'description', 'duration'])
+Task = namedtuple('Task', ['calendar_key', 'full_prefix', 'description', 'duration'])
 
 MAX_DURATION_HOURS = 18
-WARNING_DURATION_HOURS = 12
-NOTICE_DURATION_HOURS = 8
-
 
 def compile_regex():
-    calendar_prefix = r'[0-9\~\&\<\>\?]'
-    additional_prefix_info = r'.{0,5}'  # a few extra prefixes and ','
-    task_description = r'[^\[]+'        # anything not a '['
-    trailing_parentheses = r'\){1,4}'   # intend's notation for "NotDones"
+    # Regex to capture tasks like '2,3)) Do the thing [60]'
+    calendar_key_prefix = r'[0-9\~\&\<\>\?]'    # task category e.g. '2)' (determines calendar)
+    additional_prefix_info = r'.{0,5}'      # extra task categories, separated by ',' e.g. '2,3)'
+    trailing_parentheses = r'\){1,4}'       # intend's notation for "NotDones"
+    task_description = r'[^\[]+'            # anything not a '['
 
     task_regex = re.compile(rf"""
-        ^                               # Start of the line
-        (                               # Capturing group for the whole prefix
-            \(?                         # Optional opening parenthesis '('
-            {calendar_prefix}           # Calendar prefix
-        )                               # End of the prefix capturing group
-        {additional_prefix_info}        # Additional prefix info
-        {trailing_parentheses}          # Trailing parentheses ')'
-        \s*                             # Optional whitespace
-        ({task_description})            # Capturing group for the task description
-        \[([0-9]+)\]                    # Capturing group for the duration '[60]'
+        ^                                   # Start of the line
+        (                                   # Start capture groups 1 for full prefix
+            \(?                             # Optional opening parenthesis '('
+            ({calendar_key_prefix})         # Capture group 2 for calendar determining prefix
+            {additional_prefix_info}        # Secondary task categories
+            {trailing_parentheses}          # Intend's notation for "NotDones"
+        )                                   # End of capturing group 1
+        \s*                                 # Optional whitespace
+        ({task_description})                # Capturing group 2 for the task description
+        \[([0-9]+)\]                        # Capturing group 3 for the duration '[60]'
     """, re.VERBOSE)
     return task_regex
 
@@ -34,14 +32,13 @@ def compile_regex():
 def parse_line(line, task_regex):
    match = task_regex.match(line)
    if match:
-       # Handle '(X)' and 'X)' cases. 
-       calendar_key = match.group(1)
-       description = match.group(2).strip()
-
-       duration = int(match.group(3))
+       full_prefix = match.group(1)
+       calendar_key = match.group(2)
+       description = match.group(3).strip()
+       duration = int(match.group(4))
        duration = math.ceil(duration / 5) * 5
 
-       return Task(calendar_key, description, duration)
+       return Task(calendar_key, full_prefix, description, duration)
 
 
 def print_info(tasks, total_duration):
@@ -50,13 +47,8 @@ def print_info(tasks, total_duration):
         f'Expected duration: {total_duration // 60} h {total_duration % 60} min'
     )
     if total_duration > 60 * MAX_DURATION_HOURS:
-        print('ABORT: Total duration > 18 h !')
+        print(f'ABORT: Total duration > {MAX_DURATION_HOURS} h !')
         return
-    elif total_duration > 60 * WARNING_DURATION_HOURS:
-        print('DANGER: Unsustainable workload!')
-    elif total_duration > 60 * NOTICE_DURATION_HOURS:
-        print('WARNING: Significant workload')
-
 
 def parse_tasks(task_list):
     task_regex = compile_regex()
@@ -64,6 +56,8 @@ def parse_tasks(task_list):
     total_duration = 0
 
     for line in task_list:
+        # silently ignore empty lines and tasks marked '-', '+' 
+        # (notation for 'not today-ed' and 'done' before entering into Intend)
         if line.startswith(('-', '+', '\n')):
             continue
         Task = parse_line(line, task_regex)
@@ -71,7 +65,7 @@ def parse_tasks(task_list):
             tasks.append(Task)
             total_duration += Task.duration
         else:
-            print(f'Warning: Ignored malformed task line: "{line}"')
+            print(f'Ignored task line: "{line}"')
 
     print_info(tasks, total_duration)
 
