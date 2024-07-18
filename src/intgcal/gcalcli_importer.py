@@ -12,5 +12,8 @@ def import_with_gcalcli(calendar_mapping, task_list_path):
         if os.path.exists(ics_file):
             # Escape parentheses in calendar name (causes error for gcalcli)
             calendar_name = calendar_id.replace("(", r"\(").replace(")", r"\)")
-            subprocess.run(["gcalcli", "import", ics_file, "--calendar",
+            try:
+                subprocess.run(["gcalcli", "import", ics_file, "--calendar",
                             calendar_name], check=True)
+            except:
+                subprocess.run(["open", "https://console.cloud.google.com/apis/credentials?project=intgcal"], check=True)
